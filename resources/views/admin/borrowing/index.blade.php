@@ -217,7 +217,7 @@
                 document.getElementById("contenthere").innerHTML ='';
                 for(let i=0; i< data.length; i++)
                 {
-                    let apparatusindex = @json(Session::get('addeditems')).indexOf('7');
+                    let apparatusindex = @json(Session::get('addeditems')).indexOf(data[i].id.toString());
                     let tosubtract = apparatusindex == -1 ? 0: @json(Session::get('qty'))[apparatusindex];
                     document.getElementById("contenthere").innerHTML += `<div class=" article-loop col-md-3 col-sm-6   mt-md-3 mt-4">
                     <div class="card">
@@ -389,4 +389,5 @@
 
 
 @include('admin.modals.borrowing.addeditems')
+@include('components.notification')
 @endsection

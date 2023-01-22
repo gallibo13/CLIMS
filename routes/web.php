@@ -51,6 +51,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [BorrowingController::class, 'index'])->name('borrowing');
         Route::post('/', [BorrowingController::class, 'searchtext'])->name('borrowing.searchtext');
         Route::post('/additem' ,[BorrowingController::class, 'additem'])->name('borrowing.additem');
+        Route::post('/clearItems' ,[BorrowingController::class, 'clearItems'])->name('borrowing.clearItems');
+        Route::get('/borrowing' ,[BorrowingController::class, 'borrowing'])->name('borrowing.borrowing');
+        Route::post('/addborrower' ,[BorrowingController::class, 'addborrower'])->name('borrowing.addborrower');
+
     });
 
 });

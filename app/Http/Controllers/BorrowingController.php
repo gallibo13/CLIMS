@@ -5,7 +5,10 @@ use App\Models\Apparatus;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Borrowing;
 use App\Models\Section;
+use App\Models\Systemsetting;
+use App\Models\Borrower;
 
 class BorrowingController extends Controller
 {
@@ -89,5 +92,44 @@ class BorrowingController extends Controller
             Session::put('borrowerid' , $request->borrowerid);
         }
         return view('admin.borrowing.borrowing' , ['Students' => $students , 'Sections' => $sections ,  'Apparatus' => $apparatus]);
+    }
+    public function borrowitems(Request $request)
+    {
+        $setting = Systemsetting::first();
+        $borrowing = new Borrowing();
+
+        $borrowing->dateborrowed  = $request->dateborrowed;
+        $borrowing->status  = 'Active';
+        $borrowing->totalqty  = array_sum(session('qty')) +1;
+        $borrowing->returnedqty  = 0;
+        $borrowing->description  = $request->description;
+        $borrowing->borrowingtype  = $request->type;
+        $borrowing->semester  = $setting->currentsemester;
+        $borrowing->year  = $setting->currentyear;
+        if(session('borrowercategory') =='Section')
+        {
+            $borrowing->section_id = session('borrowerid');
+        }
+        $borrowing->save();
+
+
+        if( session('borrowercategory') == 'Student')
+        {
+             for($i = 0; $i < sizeof(session('borrowerid')) ; $i++)
+            {
+                $borrower  = new Borrower();
+                $borrower->borrowing_id = $borrowing->id;
+                $borrower->student_id = session('borrowerid')[$i];
+                $borrower->save();
+            }
+        }
+
+        $apparatus = Apparatus::all();
+        return redirect()->route('borrowing',  ['Apparatus' => $apparatus ])->with('message' , 'Borrowing recorded');
+    }
+    public function borrowinglist()
+    {
+        $borrowings= Borrowing::with('borrowers')->get();
+        return view('admin.borrowing.borrowinglist' , ['Borrowings' => $borrowings]);
     }
 }

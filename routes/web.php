@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/clearItems' ,[BorrowingController::class, 'clearItems'])->name('borrowing.clearItems');
         Route::get('/borrowing' ,[BorrowingController::class, 'borrowing'])->name('borrowing.borrowing');
         Route::post('/addborrower' ,[BorrowingController::class, 'addborrower'])->name('borrowing.addborrower');
+        Route::post('/borrowitems' ,[BorrowingController::class, 'borrowitems'])->name('borrowing.borrowitems');
+        Route::get('/list' ,[BorrowingController::class, 'borrowinglist'])->name('borrowing.list');
 
     });
 

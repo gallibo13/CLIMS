@@ -138,26 +138,26 @@
                         </div>
                     </div>
 
-                    <form role="form" method="post" action="{{ route('apparatus.store') }}">
+                    <form role="form" method="post" action="{{ route('borrowing.borrowitems') }}">
                         @csrf
                         <div class="row d-flex justify-content-center">
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" placeholder="Date Borrowed" name="dateborrowed" >
+                                    <input type="date" class="form-control" placeholder="Date Borrowed" name="dateborrowed"  value="{{ date('Y-m-d') }}" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row d-flex justify-content-center">
                             <div class="col-lg-12">
                                 <div class="mb-3 ">
-                                    <textarea class="form-control" placeholder="Description..." id="floatingTextarea" name="description"></textarea>
+                                    <textarea class="form-control" placeholder="Description..." id="floatingTextarea" name="description" required></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row d-flex justify-content-center">
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <select class="form-control" aria-label="Apparatusselect" name="type">
+                                    <select class="form-control" aria-label="Apparatusselect" name="type" required>
 
                                             <option value="semester"> Whole Semester</option>
                                             <option value="once"> One Time Only</option>

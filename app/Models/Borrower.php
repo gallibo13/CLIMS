@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Borrowing extends Model
+class Borrower extends Model
 {
     use HasFactory;
 
-    public function borrowers()
+    public function borrowing()
     {
-        return $this->hasMany(Borrower::class);
+        return $this->belongsTo(Borrowing::class);
     }
 }

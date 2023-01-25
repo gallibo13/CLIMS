@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 use App\Models\Category;
+use App\Models\Section;
+use App\Models\SchoolYear;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,7 +25,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Category::factory(10)->create();
-        $this->call(UserSeeder::class);
+        Section::factory(10)->create();
+        SchoolYear::factory(3)->create();
         $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

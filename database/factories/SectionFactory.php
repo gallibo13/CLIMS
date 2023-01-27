@@ -17,10 +17,10 @@ class SectionFactory extends Factory
     public function definition()
     {
         return [
-            'sectionname' => $this->faker->unique()->numerify('Section ###'),
+            'sectionname' => $this->faker->unique()->numerify('Section #'),
             'description' => $this->faker->realText($maxNbChars = 100),
             'year'=>'2023',
-            'semester' => $this->faker->biasedNumberBetween($min = 0,  $max = 3),
+            'semester' => $this->faker->biasedNumberBetween($min = 1,  $max = 2),
         ];
     }
 }

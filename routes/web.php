@@ -23,7 +23,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
+//USING ROLE MIDDLEWARE
+// Route::get('/routesample', function(){
+//     return 'hello';
+// })->middleware(['auth' , 'role:Student']);
+
+
+
+
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/home', [ApparatusController::class, 'index'])->name('home');
 
     Route::prefix('apparatus')->group(function()

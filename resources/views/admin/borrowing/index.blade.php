@@ -233,10 +233,10 @@
                         <hr class="horizontal dark my-3">
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
-                                <input class="form-control  form-control-sm w-100 mt-2" type="number" id="qty_` + i +`" required>
+                                <input class="form-control  form-control-sm w-100 mt-2" type="number" id="qty_` + (i+1) +`" required>
                             </div>
-                            <div class="col-sm-12 col-md-4">
-                                <button class="btn btn-info w-100 mt-2"> <i class="fa-solid fa-cart-plus"></i> </button>
+                            <div class="col-sm-12 col-md-4" >
+                                <button class="btn btn-info w-100 mt-2" onclick="additem(` +(i+1)+ ',' + data[i].id + ',' +  (data[i].available - tosubtract)  +`)"> <i class="fa-solid fa-cart-plus"></i> </button>
                             </div>
                         </div>
                         <h5 class="mb-0">$455.00</h5>
@@ -373,7 +373,9 @@
 <script>
     function additem(id, apparatusid ,limitqty)
     {
+
         var qty=document.getElementById('qty_' + id).value;
+
         if (qty =='' || qty < 0 || qty > limitqty)
         {
             document.getElementById('qty_' + id).focus();
@@ -383,6 +385,7 @@
             document.getElementById('apparatusid').value =  apparatusid ;
             document.getElementById('apparatusqty').value = qty ;
             document.getElementById('addItemForm').submit();
+            console.log(qty);
         }
     }
 </script>

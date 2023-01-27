@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 use App\Models\Category;
+use App\Models\Apparatus;
 use App\Models\Section;
 use App\Models\SchoolYear;
 
@@ -25,9 +26,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Category::factory(10)->create();
-        Section::factory(10)->create();
-        SchoolYear::factory(3)->create();
+        Section::factory(3)->create();
+        Apparatus::factory(3)->create();
+
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(SchoolYearSeeder::class);
+        $this->call(SystemsettingSeeder::class);
     }
 }

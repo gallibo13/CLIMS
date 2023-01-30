@@ -9,6 +9,7 @@ use App\Models\Borrowing;
 use App\Models\Section;
 use App\Models\Systemsetting;
 use App\Models\Borrower;
+use App\Models\Borrowingdetail;
 
 class BorrowingController extends Controller
 {
@@ -75,9 +76,10 @@ class BorrowingController extends Controller
                 else
                 {
                     $index = array_search($request->borrowerid,Session::get('borrowerid'));
-                    if($index == null)
+                    if($index === null)
+                    {
                         Session::push('borrowerid' ,$request->borrowerid);
-
+                    }
                 }
             }
             else
@@ -95,9 +97,11 @@ class BorrowingController extends Controller
     }
     public function borrowitems(Request $request)
     {
+        //GET SETTING INFOR, GET THE CURRENT YEAR
         $setting = Systemsetting::first();
         $borrowing = new Borrowing();
 
+        //INSERT TO BORROWING TABLE
         $borrowing->dateborrowed  = $request->dateborrowed;
         $borrowing->status  = 'Active';
         $borrowing->totalqty  = array_sum(session('qty')) +1;
@@ -106,16 +110,16 @@ class BorrowingController extends Controller
         $borrowing->borrowingtype  = $request->type;
         $borrowing->semester  = $setting->currentsemester;
         $borrowing->year  = $setting->currentyear;
-        if(session('borrowercategory') =='Section')
+        if(session('borrowercategory') =='Section') // IF BORROWER CATEGORY IS SECTION, INSERT SECTION ID
         {
             $borrowing->section_id = session('borrowerid');
         }
         $borrowing->save();
 
-
+        //IF BORROWER CATEGORY IS STUDENT, INSERT STUDENT IDs TO BORROWER TABLE
         if( session('borrowercategory') == 'Student')
         {
-             for($i = 0; $i < sizeof(session('borrowerid')) ; $i++)
+            for($i = 0; $i < sizeof(session('borrowerid')) ; $i++)
             {
                 $borrower  = new Borrower();
                 $borrower->borrowing_id = $borrowing->id;
@@ -123,6 +127,27 @@ class BorrowingController extends Controller
                 $borrower->save();
             }
         }
+
+        //INSERT TO BORROWING DETAILS TABLE
+        for($i = 1; $i <  sizeof(session('addeditems')); $i++)
+        {
+            $borrowingdetail  =  new Borrowingdetail();
+            $borrowingdetail->borrowing_id= $borrowing->id;
+            $borrowingdetail->statusperitem = 'Borrowed';
+            $borrowingdetail->apparatus_id = session('addeditems')[$i] ;
+            $borrowingdetail->itemqty = session('qty')[$i] ;
+            $borrowingdetail->returnedqty = 0 ;
+            $borrowingdetail->save();
+
+            //UPDATE APPARATUS AVAILABLE QTY
+            $apparatusdetail = Apparatus::findorFail(session('addeditems')[$i]);
+            $apparatusdetail->available = $apparatusdetail->available - session('qty')[$i];
+            $apparatusdetail->borrowed  = $apparatusdetail->borrowed + session('qty')[$i];
+            $apparatusdetail->update();
+        }
+        Session::put('addeditems', array('-1'));
+        Session::put('qty', array('-1'));
+
 
         $apparatus = Apparatus::all();
         return redirect()->route('borrowing',  ['Apparatus' => $apparatus ])->with('message' , 'Borrowing recorded');

@@ -1,3 +1,7 @@
+
+@php
+    use Illuminate\Support\Str;
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -103,6 +107,7 @@
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Borrower</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Borrowed Qty</th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
@@ -121,6 +126,15 @@
                                 <p class="text-xs font-weight-bold mb-0">{{ $borrowing->dateborrowed}}</p>
                             </td>
                             <td>
+                                @if($borrowing->section_id !='' )
+                                    <p class="text-xs font-weight-bold mb-0">{{ $borrowing->section_id}}</p>
+                                @else
+                                    @foreach ($borrowing->borrowers as $borrower )
+                                        <span class="text-sm">{{ Str::ucfirst( $borrower->student->firstname . " " . $borrower->student->lastname)}}</span> <br>
+                                    @endforeach
+                                @endif
+                            </td>
+                            <td>
                                 <p class=" btn py-2 text-xs font-weight-bold mb-0 {{ $borrowing->status =='Active' ? ' btn-danger ' : ' btn-success ' }}">{{ $borrowing->status }}</p>
                             </td>
                             <td>
@@ -137,9 +151,9 @@
                                 <p class="text-xs font-weight-bold mb-0">{{ $borrowing->semester }}</p>
                             </td>
                             <td>
-                                <button class="btn btn-primary px-2 py-2">
+                                <a class="btn btn-primary px-2 py-2" href="/borrowing/list/{{ $borrowing->id }}">
                                     <i class="fa-solid fa-eye"></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

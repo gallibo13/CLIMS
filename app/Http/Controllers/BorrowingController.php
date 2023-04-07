@@ -76,7 +76,7 @@ class BorrowingController extends Controller
                 else
                 {
                     $index = array_search($request->borrowerid,Session::get('borrowerid'));
-                    if($index === null)
+                    if($index === null || $index =='')
                     {
                         Session::push('borrowerid' ,$request->borrowerid);
                     }
@@ -92,8 +92,9 @@ class BorrowingController extends Controller
         {
             Session::put('borrowercategory',  'Section');
             Session::put('borrowerid' , $request->borrowerid);
+            echo "section";
         }
-        return view('admin.borrowing.borrowing' , ['Students' => $students , 'Sections' => $sections ,  'Apparatus' => $apparatus]);
+       return view('admin.borrowing.borrowing' , ['Students' => $students , 'Sections' => $sections ,  'Apparatus' => $apparatus]);
     }
     public function borrowitems(Request $request)
     {
@@ -156,5 +157,37 @@ class BorrowingController extends Controller
     {
         $borrowings= Borrowing::with('borrowers')->get();
         return view('admin.borrowing.borrowinglist' , ['Borrowings' => $borrowings]);
+    }
+    public function borrowingdetails($id)
+    {
+        session::put('borrowingID'  , $id);
+        $borrowing = borrowing::with('borrowingdetails','borrowers')->findOrFail($id);
+
+        return view('admin.borrowingdetails.index',  ["borrowing" => $borrowing]);
+    }
+
+    public function returnApparatus(Request $request)
+    {
+        $borrowing = Borrowing::findOrFail(session('borrowingID'));
+        $borrowingDetail = BorrowingDetail::where('borrowing_id' , session('borrowingID'))
+                                        ->where('apparatus_id' , $request->itemID)->first();
+        if( ($borrowingDetail->returnedqty +  $request->returnqty) >= $borrowingDetail->itemqty  )
+        {
+            $borrowingDetail->statusperitem  = 'Returned';
+        }
+        $borrowingDetail->returnedqty = $borrowingDetail->returnedqty + $request->returnqty;
+        $borrowingDetail->update();
+
+
+
+        if( ($borrowing->returnedqty +  $request->returnqty) >= $borrowing->totalqty  )
+        {
+            echo $borrowing->returnedqty +  $request->returnqty . "<br>";
+            echo $borrowing->totalqty . "<br>";
+            $borrowing->status  = 'Returned';
+        }
+        $borrowing->returnedqty =  $borrowing->returnedqty + $request->returnqty;
+        $borrowing->update();
+        return back()->with('message' , 'Recorded.');
     }
 }

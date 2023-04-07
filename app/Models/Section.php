@@ -13,4 +13,8 @@ class Section extends Model
     {
         return $this->belongsToMany(Student::class );
     }
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
 }

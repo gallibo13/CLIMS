@@ -65,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/addborrower' ,[BorrowingController::class, 'addborrower'])->name('borrowing.addborrower');
         Route::post('/borrowitems' ,[BorrowingController::class, 'borrowitems'])->name('borrowing.borrowitems');
         Route::get('/list' ,[BorrowingController::class, 'borrowinglist'])->name('borrowing.list');
+        Route::get('/list/{id}' ,[BorrowingController::class, 'borrowingdetails'])->name('borrowing.details');
+
+        Route::post('/returnApparatus' ,[BorrowingController::class, 'returnApparatus'])->name('borrowing.returnApparatus');
 
     });
 

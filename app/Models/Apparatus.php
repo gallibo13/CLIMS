@@ -14,4 +14,9 @@ class Apparatus extends Model
         return $this->belongsTo(category::class);
     }
 
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowingdetail::class);
+    }
+
 }

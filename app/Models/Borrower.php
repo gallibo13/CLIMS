@@ -13,4 +13,8 @@ class Borrower extends Model
     {
         return $this->belongsTo(Borrowing::class);
     }
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }

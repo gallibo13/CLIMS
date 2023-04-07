@@ -13,4 +13,12 @@ class Borrowing extends Model
     {
         return $this->hasMany(Borrower::class);
     }
+    public function borrowingdetails()
+    {
+        return $this->hasMany(Borrowingdetail::class);
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
 }

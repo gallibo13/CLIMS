@@ -13,4 +13,8 @@ class Student extends Model
     {
         return $this->belongsToMany(Section::class);
     }
+    public function borrowings()
+    {
+        return $this->hasMany(Borrower::class);
+    }
 }
